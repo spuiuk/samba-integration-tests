@@ -49,6 +49,37 @@ def get_default_mount_params(test_info):
         test_info["test_users"][0]["password"]
     )
 
+def get_total_mount_parameter_combinations(test_info):
+    """Get total number of combinations of mount parameters for each share.
+    This is essentially "number of public  interfaces * number of test users"
+
+    Parameters:
+    test_info: Dict containing the parsed yaml file.
+
+    Returns:
+    int: number of possible combinations.
+    """
+    return len(test_info["public_interfaces"]) * len(test_info["test_users"])
+
+def get_mount_parameter(test_info, share, combonum):
+    """Get the mount_params dict for a given share and given combination number
+
+    Parameters:
+    test_info: Dict containing the parsed yaml file.
+    share: The share for which to get the mount_params
+    combonum: The combination number to use.
+    """
+    if (combonum > get_total_mount_parameter_combinations(test_info)):
+        assert False, "Invalid combination number"
+    num_public = combonum / len(test_info["test_users"])
+    num_users = combonum % len(test_info["test_users"])
+    return gen_mount_params(
+        test_info["public_interfaces"][num_public],
+        share,
+        test_info["test_users"][num_users]["username"],
+        test_info["test_users"][num_users]["password"]
+    )
+
 def cifs_mount(mount_params, mount_point, opts="vers=2.1"):
     """Use the cifs module to mount a share.
 
