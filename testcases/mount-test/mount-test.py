@@ -2,7 +2,7 @@
 
 # Test mounts a cifs share, creates a new file on it, writes to it, deletes the file and unmounts
 
-from sit_libs import testhelper
+import testhelper
 import os, sys
 
 test_string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
